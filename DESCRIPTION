@@ -24,4 +24,5 @@ Depends:
   lmtest,
   modelsummary,
   plotly,
-  stats
+  stats,
+  texreg
