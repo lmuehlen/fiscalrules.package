@@ -22,7 +22,7 @@ fixed_effects=c(id,time)
   if(class(data_input)[1]=="fixest_panel"){
     data<-data_input
   }else{
-    data<-data%>%as.data.frame()%>%panel(panel.id=c(id,time))
+    data<-data%>%panel(panel.id=c(id,time))
   }
 
 
@@ -88,7 +88,7 @@ fixed_effects=c(id,time)
 
   #estimation of models (the number of the models is the number of the lags of the dependent variable)
   m<-lapply(formula,function(x){
-    feols(as.formula(x),data = data,
+    fixest::feols(as.formula(x),data = data,
           vcov = ~countrycode)
   })
 
