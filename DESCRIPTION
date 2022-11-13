@@ -11,3 +11,17 @@ Encoding: UTF-8
 LazyData: true
 URL: https://github.com/lmuehlen/fiscalrules.project
 BugReports: https://github.com/lmuehlen/fiscalrules.project/issues
+Imports: 
+  tidyverse,
+  fixest,
+  plm,
+  readxl,
+  dotwhisker,
+  sf,
+  ggthemes,
+  ggpubr,
+  sandwich,
+  lmtest,
+  modelsummary,
+  plotly,
+  stats
