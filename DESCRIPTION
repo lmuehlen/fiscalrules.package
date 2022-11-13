@@ -24,5 +24,4 @@ Imports:
   lmtest,
   modelsummary,
   plotly,
-  stats,
-  NULL
+  stats
