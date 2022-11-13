@@ -13,6 +13,8 @@ URL: https://github.com/lmuehlen/fiscalrules.project
 BugReports: https://github.com/lmuehlen/fiscalrules.project/issues
 Depends: 
   tidyverse,
+  sandwich,
+  stats,
   fixest,
   plm,
   readxl,
@@ -20,9 +22,7 @@ Depends:
   sf,
   ggthemes,
   ggpubr,
-  sandwich,
   lmtest,
   modelsummary,
   plotly,
-  stats,
   texreg
