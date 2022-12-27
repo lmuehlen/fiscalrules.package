@@ -1,4 +1,4 @@
-get_table<-function(l,filename="test",caption=NULL,fontsize=NULL,digits=4,label=NULL,side=FALSE,lag_order,header,path="C:/Users/leona/Dropbox/Apps/Overleaf/The Political Economy of Fiscal Rules - Between Deficit and Disinvestment Bias/Tables/"){
+get_table<-function(l,filename="test",caption=NULL,fontsize=NULL,digits=4,label=NULL,side=FALSE,lag_order,header,path){
 
   iv<-FALSE
   ab<-FALSE

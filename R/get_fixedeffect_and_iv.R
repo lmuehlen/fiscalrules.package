@@ -88,7 +88,7 @@ fixed_effects=c(id,time)
 
   #estimation of models (the number of the models is the number of the lags of the dependent variable)
   m<-lapply(formula,function(x){
-    fixest::feols(as.formula(x),data = data,
+    fixest::feols(as.formula(x),data = data_input,
           vcov = ~countrycode)
   })
 
