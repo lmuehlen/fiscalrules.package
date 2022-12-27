@@ -13,7 +13,7 @@
 #   Check Package:             'Ctrl + Shift + E'
 #   Test Package:              'Ctrl + Shift + T'
 
-get_fixedeffect_and_iv<-function(data_input,dep_var,dep_var_log=TRUE,exp_var,lag=0:3,dynamic=TRUE,dyn_lag=3,dyn_lag_with_lag=FALSE, IV=TRUE,inst_var=c("dpi_govfrac"),lag_inst_var=2,controls,id=NULL,time=NULL){
+get_fixedeffect_and_iv<-function(data_input,dep_var,dep_var_log=TRUE,exp_var,lag=0:3,dynamic=TRUE,dyn_lag=3,dyn_lag_with_lag=FALSE, IV=TRUE,inst_var=c("dpi_govfrac"),lag_inst_var=2,controls,fixed_effects=c("countrycode"),id="nuts_id",time="year"){
 
 
 fixed_effects=c(id,time)
@@ -22,7 +22,7 @@ fixed_effects=c(id,time)
   if(class(data_input)[1]=="fixest_panel"){
     data<-data_input
   }else{
-    data<-data%>%panel(panel.id=c(id,time))
+    data<-data_input%>%panel(panel.id=c(id,time))
   }
 
 
@@ -88,7 +88,7 @@ fixed_effects=c(id,time)
 
   #estimation of models (the number of the models is the number of the lags of the dependent variable)
   m<-lapply(formula,function(x){
-    fixest::feols(as.formula(x),data = data_input,
+    fixest::feols(as.formula(x),data = data,
           vcov = ~countrycode)
   })
 
