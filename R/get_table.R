@@ -119,7 +119,7 @@ get_table<-function(l,filename="test",caption=NULL,fontsize=NULL,digits=4,label=
 
 
   texreg(l=l,
-         file = paste0(path,filename,".txt"),
+         file = paste0(path,filename,".tex"),
          fontsize = fontsize,
          stars = c( 0.01, 0.05,0.1),
          robust=TRUE,
