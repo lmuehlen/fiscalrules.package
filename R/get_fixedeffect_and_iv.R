@@ -1,18 +1,3 @@
-# Hello, world!
-#
-# This is an example function named 'hello'
-# which prints 'Hello, world!'.
-#
-# You can learn more about package authoring with RStudio at:
-#
-#   http://r-pkgs.had.co.nz/
-#
-# Some useful keyboard shortcuts for package authoring:
-#
-#   Install Package:           'Ctrl + Shift + B'
-#   Check Package:             'Ctrl + Shift + E'
-#   Test Package:              'Ctrl + Shift + T'
-
 get_fixedeffect_and_iv<-function(data_input,dep_var,dep_var_log=TRUE,exp_var,lag=0:3,dynamic=TRUE,dyn_lag=3,dyn_lag_with_lag=FALSE, IV=TRUE,inst_var=c("dpi_govfrac"),lag_inst_var=2,controls,fixed_effects=c("countrycode"),id="nuts_id",time="year"){
 
 

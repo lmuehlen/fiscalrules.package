@@ -94,13 +94,8 @@ get_table<-function(l,filename="test",caption=NULL,fontsize=NULL,digits=4,label=
       #Wu-Hausman
       "Wu-Hausman"=sapply(l,function(x) {
         if(class(x)[1]=="fixest"&!is.null(x[["iv"]])){
-          f<-fitstat(x,"wh")[[1]]
+          f<-fitstat(x,"wh")[[1]]$p
 
-          if(is.na(f)){
-            NA
-          }else{
-            f$p
-          }
         }else{
           NA
         }
@@ -119,88 +114,49 @@ get_table<-function(l,filename="test",caption=NULL,fontsize=NULL,digits=4,label=
 
 
   texreg(l=l,
-         file = paste0(path,filename,".tex"),
+         file = paste0(path,filename,".txt"),
          fontsize = fontsize,
          stars = c( 0.01, 0.05,0.1),
          robust=TRUE,
          omit.coef = "dpi|ameco",
          custom.coef.map=list(
            ###########for AB
-           "stats::lag(frd_lg_full, 0)"="$FR^{lg}_{t-h}$",
-           "stats::lag(frd_lg_full, 1)"="$FR^{lg}_{t-h}$",
-           "stats::lag(frd_lg_full, 2)"="$FR^{lg}_{t-h}$",
-           "stats::lag(frd_lg_full, 3)"="$FR^{lg}_{t-h}$",
-           "stats::lag(frd_lg_full, 4)"="$FR^{lg}_{t-h}$",
-           "stats::lag(frd_rg_full, 0)"="$FR^{rg}_{t-h}$",
-           "stats::lag(frd_rg_full, 1)"="$FR^{rg}_{t-h}$",
-           "stats::lag(frd_rg_full, 2)"="$FR^{rg}_{t-h}$",
-           "stats::lag(frd_rg_full, 3)"="$FR^{rg}_{t-h}$",
-           "stats::lag(frd_rg_full, 4)"="$FR^{rg}_{t-h}$",
            "stats::lag(frd_sng_full, 0)"="$FR^{sng}_{t-h}$",
            "stats::lag(frd_sng_full, 1)"="$FR^{sng}_{t-h}$",
            "stats::lag(frd_sng_full, 2)"="$FR^{sng}_{t-h}$",
            "stats::lag(frd_sng_full, 3)"="$FR^{sng}_{t-h}$",
            "stats::lag(frd_sng_full, 4)"="$FR^{sng}_{t-h}$",
+           "stats::lag(frd_sng_full, 5)"="$FR^{sng}_{t-h}$",
            #gfcf_nms_pps
-           "stats::lag(log(ardeco_gfcf_nms_pps), 0)"="$log(gfcf^{pps}_{t-1})$",
-           "stats::lag(log(ardeco_gfcf_nms_pps), 1)"="$log(gfcf^{pps}_{t-1})$",
-           "stats::lag(log(ardeco_gfcf_nms_pps), 2)"="$log(gfcf^{pps}_{t-2})$",
-           "stats::lag(log(ardeco_gfcf_nms_pps), 3)"="$log(gfcf^{pps}_{t-3})$",
-           "stats::lag(log(ardeco_gfcf_nms_pps), 4)"="$log(gfcf^{pps}_{t-4})$",
-           "stats::lag(log(ardeco_gfcf_nms_pps), 5)"="$log(gfcf^{pps}_{t-5})$",
-           "stats::lag(log(ardeco_gfcf_nms_pps), 6)"="$log(gfcf^{pps}_{t-6})$",
-           "stats::lag(log(ardeco_gfcf_nms_pps), 7)"="$log(gfcf^{pps}_{t-7})$",
-           "stats::lag(log(ardeco_gfcf_nms_pps), 8)"="$log(gfcf^{pps}_{t-8})$",
-           #gfcf_nms_cp
-           "stats::lag(log(ardeco_gfcf_nms_cp), 0)"="$log(gfcf^{cp}_{t-1})$",
-           "stats::lag(log(ardeco_gfcf_nms_cp), 1)"="$log(gfcf^{cp}_{t-1})$",
-           "stats::lag(log(ardeco_gfcf_nms_cp), 2)"="$log(gfcf^{cp}_{t-2})$",
-           "stats::lag(log(ardeco_gfcf_nms_cp), 3)"="$log(gfcf^{cp}_{t-3})$",
-           "stats::lag(log(ardeco_gfcf_nms_cp), 4)"="$log(gfcf^{cp}_{t-4})$",
-           "stats::lag(log(ardeco_gfcf_nms_cp), 5)"="$log(gfcf^{cp}_{t-5})$",
-           "stats::lag(log(ardeco_gfcf_nms_cp), 6)"="$log(gfcf^{cp}_{t-6})$",
-           "stats::lag(log(ardeco_gfcf_nms_cp), 7)"="$log(gfcf^{cp}_{t-7})$",
-           "stats::lag(log(ardeco_gfcf_nms_cp), 8)"="$log(gfcf^{cp}_{t-8})$",
-           #gfcf_nms_bp
-           "stats::lag(log(ardeco_gfcf_nms_bp), 0)"="$log(gfcf^{bp}_{t-1})$",
-           "stats::lag(log(ardeco_gfcf_nms_bp), 1)"="$log(gfcf^{bp}_{t-1})$",
-           "stats::lag(log(ardeco_gfcf_nms_bp), 2)"="$log(gfcf^{bp}_{t-2})$",
-           "stats::lag(log(ardeco_gfcf_nms_bp), 3)"="$log(gfcf^{bp}_{t-3})$",
-           "stats::lag(log(ardeco_gfcf_nms_bp), 4)"="$log(gfcf^{bp}_{t-4})$",
-           "stats::lag(log(ardeco_gfcf_nms_bp), 5)"="$log(gfcf^{bp}_{t-5})$",
-           "stats::lag(log(ardeco_gfcf_nms_bp), 6)"="$log(gfcf^{bp}_{t-6})$",
-           "stats::lag(log(ardeco_gfcf_nms_bp), 7)"="$log(gfcf^{bp}_{t-7})$",
-           "stats::lag(log(ardeco_gfcf_nms_bp), 8)"="$log(gfcf^{bp}_{t-8})$",
+           "stats::lag(log(ardeco_gfcf_nms_pps), 1)"="$\\mbox{dependent variable}_{t-1}$",
+           "stats::lag(log(ardeco_gfcf_nms_pps), 2)"="$\\mbox{dependent variable}_{t-2}$",
+           "stats::lag(log(ardeco_gfcf_nms_pps), 3)"="$\\mbox{dependent variable}_{t-3}$",
+           "stats::lag(log(ardeco_gfcf_nms_pps), 4)"="$\\mbox{dependent variable}_{t-4}$",
+           "stats::lag(log(ardeco_gfcf_nms_pps), 5)"="$\\mbox{dependent variable}_{t-5}$",
+           "stats::lag(log(ardeco_gfcf_nms_pps), 6)"="$\\mbox{dependent variable}_{t-6}$",
+           "stats::lag(log(ardeco_gfcf_nms_pps), 7)"="$\\mbox{dependent variable}_{t-7}$",
+           "stats::lag(log(ardeco_gfcf_nms_pps), 8)"="$\\mbox{dependent variable}_{t-8}$",
+
            #gva_nms_pps
-           "stats::lag(log(ardeco_gva_nms_pps), 0)"="$log(gva^{pps}_{t-1})$",
-           "stats::lag(log(ardeco_gva_nms_pps), 1)"="$log(gva^{pps}_{t-1})$",
-           "stats::lag(log(ardeco_gva_nms_pps), 2)"="$log(gva^{pps}_{t-2})$",
-           "stats::lag(log(ardeco_gva_nms_pps), 3)"="$log(gva^{pps}_{t-3})$",
-           "stats::lag(log(ardeco_gva_nms_pps), 4)"="$log(gva^{pps}_{t-4})$",
-           "stats::lag(log(ardeco_gva_nms_pps), 5)"="$log(gva^{pps}_{t-5})$",
-           "stats::lag(log(ardeco_gva_nms_pps), 6)"="$log(gva^{pps}_{t-6})$",
-           "stats::lag(log(ardeco_gva_nms_pps), 7)"="$log(gva^{pps}_{t-7})$",
-           "stats::lag(log(ardeco_gva_nms_pps), 8)"="$log(gva^{pps}_{t-8})$",
-           #gva_nms_cp
-           "stats::lag(log(ardeco_gva_nms_cp), 0)"="$log(gva^{cp}_{t-1})$",
-           "stats::lag(log(ardeco_gva_nms_cp), 1)"="$log(gva^{cp}_{t-1})$",
-           "stats::lag(log(ardeco_gva_nms_cp), 2)"="$log(gva^{cp}_{t-2})$",
-           "stats::lag(log(ardeco_gva_nms_cp), 3)"="$log(gva^{cp}_{t-3})$",
-           "stats::lag(log(ardeco_gva_nms_cp), 4)"="$log(gva^{cp}_{t-4})$",
-           "stats::lag(log(ardeco_gva_nms_cp), 5)"="$log(gva^{cp}_{t-5})$",
-           "stats::lag(log(ardeco_gva_nms_cp), 6)"="$log(gva^{cp}_{t-6})$",
-           "stats::lag(log(ardeco_gva_nms_cp), 7)"="$log(gva^{cp}_{t-7})$",
-           "stats::lag(log(ardeco_gva_nms_cp), 8)"="$log(gva^{cp}_{t-8})$",
-           #gva_nms_bp
-           "stats::lag(log(ardeco_gva_nms_bp), 0)"="$log(gva^{bp}_{t-1})$",
-           "stats::lag(log(ardeco_gva_nms_bp), 1)"="$log(gva^{bp}_{t-1})$",
-           "stats::lag(log(ardeco_gva_nms_bp), 2)"="$log(gva^{bp}_{t-2})$",
-           "stats::lag(log(ardeco_gva_nms_bp), 3)"="$log(gva^{bp}_{t-3})$",
-           "stats::lag(log(ardeco_gva_nms_bp), 4)"="$log(gva^{bp}_{t-4})$",
-           "stats::lag(log(ardeco_gva_nms_bp), 5)"="$log(gva^{bp}_{t-5})$",
-           "stats::lag(log(ardeco_gva_nms_bp), 6)"="$log(gva^{bp}_{t-6})$",
-           "stats::lag(log(ardeco_gva_nms_bp), 7)"="$log(gva^{bp}_{t-7})$",
-           "stats::lag(log(ardeco_gva_nms_bp), 8)"="$log(gva^{bp}_{t-8})$",
+           "stats::lag(log(ardeco_gva_nms_pps), 1)"="$\\mbox{dependent variable}_{t-1}$",
+           "stats::lag(log(ardeco_gva_nms_pps), 2)"="$\\mbox{dependent variable}_{t-2}$",
+           "stats::lag(log(ardeco_gva_nms_pps), 3)"="$\\mbox{dependent variable}_{t-3}$",
+           "stats::lag(log(ardeco_gva_nms_pps), 4)"="$\\mbox{dependent variable}_{t-4}$",
+           "stats::lag(log(ardeco_gva_nms_pps), 5)"="$\\mbox{dependent variable}_{t-5}$",
+           "stats::lag(log(ardeco_gva_nms_pps), 6)"="$\\mbox{dependent variable}_{t-6}$",
+           "stats::lag(log(ardeco_gva_nms_pps), 7)"="$\\mbox{dependent variable}_{t-7}$",
+           "stats::lag(log(ardeco_gva_nms_pps), 8)"="$\\mbox{dependent variable}_{t-8}$",
+
+           #gfcf_gva_ratio
+           "stats::lag(ardeco_gfcf_gva_ratio, 1)"="$\\mbox{dependent variable}_{t-1}$",
+           "stats::lag(ardeco_gfcf_gva_ratio, 2)"="$\\mbox{dependent variable}_{t-2}$",
+           "stats::lag(ardeco_gfcf_gva_ratio, 3)"="$\\mbox{dependent variable}_{t-3}$",
+           "stats::lag(ardeco_gfcf_gva_ratio, 4)"="$\\mbox{dependent variable}_{t-4}$",
+           "stats::lag(ardeco_gfcf_gva_ratio, 5)"="$\\mbox{dependent variable}_{t-5}$",
+           "stats::lag(ardeco_gfcf_gva_ratio, 6)"="$\\mbox{dependent variable}_{t-6}$",
+           "stats::lag(ardeco_gfcf_gva_ratio, 7)"="$\\mbox{dependent variable}_{t-7}$",
+           "stats::lag(ardeco_gfcf_gva_ratio, 8)"="$\\mbox{dependent variable}_{t-8}$",
+
            #for Within and IV
            "fit_frd_lg_full"="$FR^{lg}_{t-h}$",
            "fit_l(frd_lg_full, 1)"="$FR^{lg}_{t-h}$",
@@ -217,6 +173,7 @@ get_table<-function(l,filename="test",caption=NULL,fontsize=NULL,digits=4,label=
            "fit_l(frd_sng_full, 2)"="$FR^{sng}_{t-h}$",
            "fit_l(frd_sng_full, 3)"="$FR^{sng}_{t-h}$",
            "fit_l(frd_sng_full, 4)"="$FR^{sng}_{t-h}$",
+           "fit_l(frd_sng_full, 5)"="$FR^{sng}_{t-h}$",
            "frd_lg_full"="$FR^{lg}_{t-h}$",
            "l(frd_lg_full, 1)"="$FR^{lg}_{t-h}$",
            "l(frd_lg_full, 2)"="$FR^{lg}_{t-h}$",
@@ -232,66 +189,37 @@ get_table<-function(l,filename="test",caption=NULL,fontsize=NULL,digits=4,label=
            "l(frd_sng_full, 2)"="$FR^{sng}_{t-h}$",
            "l(frd_sng_full, 3)"="$FR^{sng}_{t-h}$",
            "l(frd_sng_full, 4)"="$FR^{sng}_{t-h}$",
+           "l(frd_sng_full, 5)"="$FR^{sng}_{t-h}$",
            #gfcf_nms_pps
-           "log(ardeco_gfcf_nms_pps)"="$log(gfcf^{pps}_{t})$",
-           "l(log(ardeco_gfcf_nms_pps), 1)"="$log(gfcf^{pps}_{t-1})$",
-           "l(log(ardeco_gfcf_nms_pps), 2)"="$log(gfcf^{pps}_{t-2})$",
-           "l(log(ardeco_gfcf_nms_pps), 3)"="$log(gfcf^{pps}_{t-3})$",
-           "l(log(ardeco_gfcf_nms_pps), 4)"="$log(gfcf^{pps}_{t-4})$",
-           "l(log(ardeco_gfcf_nms_pps), 5)"="$log(gfcf^{pps}_{t-5})$",
-           "l(log(ardeco_gfcf_nms_pps), 6)"="$log(gfcf^{pps}_{t-6})$",
-           "l(log(ardeco_gfcf_nms_pps), 7)"="$log(gfcf^{pps}_{t-7})$",
-           "l(log(ardeco_gfcf_nms_pps), 8)"="$log(gfcf^{pps}_{t-8})$",
-           #gfcf_nms_cp
-           "log(ardeco_gfcf_nms_cp)"="$log(gfcf^{cp}_{t})$",
-           "l(log(ardeco_gfcf_nms_cp), 1)"="$log(gfcf^{cp}_{t-1})$",
-           "l(log(ardeco_gfcf_nms_cp), 2)"="$log(gfcf^{cp}_{t-2})$",
-           "l(log(ardeco_gfcf_nms_cp), 3)"="$log(gfcf^{cp}_{t-3})$",
-           "l(log(ardeco_gfcf_nms_cp), 4)"="$log(gfcf^{cp}_{t-4})$",
-           "l(log(ardeco_gfcf_nms_cp), 5)"="$log(gfcf^{cp}_{t-5})$",
-           "l(log(ardeco_gfcf_nms_cp), 6)"="$log(gfcf^{cp}_{t-6})$",
-           "l(log(ardeco_gfcf_nms_cp), 7)"="$log(gfcf^{cp}_{t-7})$",
-           "l(log(ardeco_gfcf_nms_cp), 8)"="$log(gfcf^{cp}_{t-8})$",
-           #gfcf_nms_bp
-           "log(ardeco_gfcf_nms_bp)"="$log(gfcf^{bp}_{t})$",
-           "l(log(ardeco_gfcf_nms_bp), 1)"="$log(gfcf^{bp}_{t-1})$",
-           "l(log(ardeco_gfcf_nms_bp), 2)"="$log(gfcf^{bp}_{t-2})$",
-           "l(log(ardeco_gfcf_nms_bp), 3)"="$log(gfcf^{bp}_{t-3})$",
-           "l(log(ardeco_gfcf_nms_bp), 4)"="$log(gfcf^{bp}_{t-4})$",
-           "l(log(ardeco_gfcf_nms_bp), 5)"="$log(gfcf^{bp}_{t-5})$",
-           "l(log(ardeco_gfcf_nms_bp), 6)"="$log(gfcf^{bp}_{t-6})$",
-           "l(log(ardeco_gfcf_nms_bp), 7)"="$log(gfcf^{bp}_{t-7})$",
-           "l(log(ardeco_gfcf_nms_bp), 8)"="$log(gfcf^{bp}_{t-8})$",
+           "l(log(ardeco_gfcf_nms_pps), 1)"="$\\mbox{dependent variable}_{t-1}$",
+           "l(log(ardeco_gfcf_nms_pps), 2)"="$\\mbox{dependent variable}_{t-2}$",
+           "l(log(ardeco_gfcf_nms_pps), 3)"="$\\mbox{dependent variable}_{t-3}$",
+           "l(log(ardeco_gfcf_nms_pps), 4)"="$\\mbox{dependent variable}_{t-4}$",
+           "l(log(ardeco_gfcf_nms_pps), 5)"="$\\mbox{dependent variable}_{t-5}$",
+           "l(log(ardeco_gfcf_nms_pps), 6)"="$\\mbox{dependent variable}_{t-6}$",
+           "l(log(ardeco_gfcf_nms_pps), 7)"="$\\mbox{dependent variable}_{t-7}$",
+           "l(log(ardeco_gfcf_nms_pps), 8)"="$\\mbox{dependent variable}_{t-8}$",
+
            #gva_nms_pps
-           "log(ardeco_gva_nms_pps)"="$log(gva^{pps}_{t})$",
-           "l(log(ardeco_gva_nms_pps), 1)"="$log(gva^{pps}_{t-1})$",
-           "l(log(ardeco_gva_nms_pps), 2)"="$log(gva^{pps}_{t-2})$",
-           "l(log(ardeco_gva_nms_pps), 3)"="$log(gva^{pps}_{t-3})$",
-           "l(log(ardeco_gva_nms_pps), 4)"="$log(gva^{pps}_{t-4})$",
-           "l(log(ardeco_gva_nms_pps), 5)"="$log(gva^{pps}_{t-5})$",
-           "l(log(ardeco_gva_nms_pps), 6)"="$log(gva^{pps}_{t-6})$",
-           "l(log(ardeco_gva_nms_pps), 7)"="$log(gva^{pps}_{t-7})$",
-           "l(log(ardeco_gva_nms_pps), 8)"="$log(gva^{pps}_{t-8})$",
-           #gva_nms_cp
-           "log(ardeco_gva_nms_cp)"="$log(gva^{cp}_{t})$",
-           "l(log(ardeco_gva_nms_cp), 1)"="$log(gva^{cp}_{t-1})$",
-           "l(log(ardeco_gva_nms_cp), 2)"="$log(gva^{cp}_{t-2})$",
-           "l(log(ardeco_gva_nms_cp), 3)"="$log(gva^{cp}_{t-3})$",
-           "l(log(ardeco_gva_nms_cp), 4)"="$log(gva^{cp}_{t-4})$",
-           "l(log(ardeco_gva_nms_cp), 5)"="$log(gva^{cp}_{t-5})$",
-           "l(log(ardeco_gva_nms_cp), 6)"="$log(gva^{cp}_{t-6})$",
-           "l(log(ardeco_gva_nms_cp), 7)"="$log(gva^{cp}_{t-7})$",
-           "l(log(ardeco_gva_nms_cp), 8)"="$log(gva^{cp}_{t-8})$",
-           #gva_nms_bp
-           "log(ardeco_gva_nms_bp)"="$log(gva^{bp}_{t})$",
-           "l(log(ardeco_gva_nms_bp), 1)"="$log(gva^{bp}_{t-1})$",
-           "l(log(ardeco_gva_nms_bp), 2)"="$log(gva^{bp}_{t-2})$",
-           "l(log(ardeco_gva_nms_bp), 3)"="$log(gva^{bp}_{t-3})$",
-           "l(log(ardeco_gva_nms_bp), 4)"="$log(gva^{bp}_{t-4})$",
-           "l(log(ardeco_gva_nms_bp), 5)"="$log(gva^{bp}_{t-5})$",
-           "l(log(ardeco_gva_nms_bp), 6)"="$log(gva^{bp}_{t-6})$",
-           "l(log(ardeco_gva_nms_bp), 7)"="$log(gva^{bp}_{t-7})$",
-           "l(log(ardeco_gva_nms_bp), 8)"="$log(gva^{bp}_{t-8})$"
+           "l(log(ardeco_gva_nms_pps), 1)"="$\\mbox{dependent variable}_{t-1}$",
+           "l(log(ardeco_gva_nms_pps), 2)"="$\\mbox{dependent variable}_{t-2}$",
+           "l(log(ardeco_gva_nms_pps), 3)"="$\\mbox{dependent variable}_{t-3}$",
+           "l(log(ardeco_gva_nms_pps), 4)"="$\\mbox{dependent variable}_{t-4}$",
+           "l(log(ardeco_gva_nms_pps), 5)"="$\\mbox{dependent variable}_{t-5}$",
+           "l(log(ardeco_gva_nms_pps), 6)"="$\\mbox{dependent variable}_{t-6}$",
+           "l(log(ardeco_gva_nms_pps), 7)"="$\\mbox{dependent variable}_{t-7}$",
+           "l(log(ardeco_gva_nms_pps), 8)"="$\\mbox{dependent variable}_{t-8}$",
+
+           #gfcf_gva_ratio
+           "l(ardeco_gfcf_gva_ratio, 1)"="$\\mbox{dependent variable}_{t-1}$",
+           "l(ardeco_gfcf_gva_ratio, 2)"="$\\mbox{dependent variable}_{t-2}$",
+           "l(ardeco_gfcf_gva_ratio, 3)"="$\\mbox{dependent variable}_{t-3}$",
+           "l(ardeco_gfcf_gva_ratio, 4)"="$\\mbox{dependent variable}_{t-4}$",
+           "l(ardeco_gfcf_gva_ratio, 5)"="$\\mbox{dependent variable}_{t-5}$",
+           "l(ardeco_gfcf_gva_ratio, 6)"="$\\mbox{dependent variable}_{t-6}$",
+           "l(ardeco_gfcf_gva_ratio, 7)"="$\\mbox{dependent variable}_{t-7}$",
+           "l(ardeco_gfcf_gva_ratio, 8)"="$\\mbox{dependent variable}_{t-8}$"
+
          ),
          include.wald=FALSE,
          include.nobs=FALSE,
@@ -313,3 +241,5 @@ get_table<-function(l,filename="test",caption=NULL,fontsize=NULL,digits=4,label=
   )
 
 }
+
+

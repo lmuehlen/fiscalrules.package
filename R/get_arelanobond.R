@@ -17,11 +17,11 @@ get_arelanobond<-function(data_input,dep_var,dep_var_log=TRUE,exp_var,lag=0:3,dy
 
   if(is.null(gmm_lag)){
     gmm_instruments<-sapply(lag,function(x){
-      paste0("stats::lag(",exp_var,",",x+1,":",99,")+stats::lag(",dep_var,",",2,":",99,")")
+      paste0("stats::lag(",exp_var,",",x+1,":",99,")+stats::lag(",dep_var,",",3,":",99,")")
     })
   }else{
     gmm_instruments<-sapply(lag,function(x){
-      paste0("stats::lag(",exp_var,",",x+1,":",x+gmm_lag,")+stats::lag(",dep_var,",",2,":",2+gmm_lag,")")
+      paste0("stats::lag(",exp_var,",",x+1,":",x+gmm_lag,")+stats::lag(",dep_var,",",3,":",3+gmm_lag,")")
     })
   }
 
