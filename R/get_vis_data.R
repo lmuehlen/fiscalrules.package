@@ -8,11 +8,11 @@ get_vis_data<-function(mod,mod_char){
   }else{
     m<-lapply(mod,
               function(x){get_estimates(x,draw=FALSE,cluster = ~countrycode)
-    })
+              })
   }
   m<-do.call("rbind",m)
 
-  m%>%
+  m<-m%>%
     tidyr::extract(term,into="term",regex = ".*(\\d+).*")%>%
     filter(!is.na(term))%>%
     mutate(term=paste0("Lag: ",term))
