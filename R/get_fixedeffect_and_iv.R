@@ -1,4 +1,4 @@
-get_fixedeffect_and_iv<-function(data_input,dep_var,dep_var_log=TRUE,exp_var,lag=0:3,dynamic=TRUE,dyn_lag=3,dyn_lag_with_lag=FALSE, IV=TRUE,inst_var=c("dpi_govfrac"),lag_inst_var=2,controls,fixed_effects=c("countrycode"),id="nuts_id",time="year"){
+get_fixedeffect_and_iv<-function(data_input,dep_var,interaction_variable=NULL,dep_var_log=TRUE,exp_var,lag=0:3,dynamic=TRUE,dyn_lag=3,dyn_lag_with_lag=FALSE, IV=TRUE,inst_var=c("dpi_govfrac"),lag_inst_var=2,controls,fixed_effects=c("countrycode"),id="nuts_id",time="year"){
 
 
 fixed_effects=c(id,time)
@@ -24,6 +24,14 @@ fixed_effects=c(id,time)
   exp_var<-sapply(lag,function(x){
     paste0("l(",exp_var,", ",x,")")
   })
+
+
+  #define interaction term
+  if(!is.null(interaction_variable)){
+  interaction<-sapply(lag,function(x){
+    paste0("l(",exp_var,"*",interaction_variable,", ",x,")")
+  })
+  }
 
 
 
@@ -66,9 +74,9 @@ fixed_effects=c(id,time)
 
   #paste components of formula
   if(IV){
-    formula<-paste0(dep_var,"~",controls,"|",fixed_effects,"|",exp_var,"~",inst_var)
+    formula<-paste0(dep_var,"~",controls,"|",fixed_effects,"|",exp_var,"+",interaction,"~",inst_var)
   }else{
-    formula<-paste0(dep_var,"~",exp_var,"+",controls,"|",fixed_effects)
+    formula<-paste0(dep_var,"~",exp_var,"+",interaction,"+",controls,"|",fixed_effects)
   }
 
   #estimation of models (the number of the models is the number of the lags of the dependent variable)
