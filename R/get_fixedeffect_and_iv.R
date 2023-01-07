@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 get_fixedeffect_and_iv<-function(data_input,dep_var,interaction_variable=NULL,dep_var_log=TRUE,exp_var,lag=0:3,dynamic=TRUE,dyn_lag=3,dyn_lag_with_lag=FALSE, IV=TRUE,inst_var=c("dpi_govfrac"),lag_inst_var=2,controls,fixed_effects=c("countrycode"),id="nuts_id",time="year"){
+=======
+get_fixedeffect_and_iv<-function(data_input,dep_var,interaction_variable,dep_var_log=TRUE,exp_var,lag=0:3,dynamic=TRUE,dyn_lag=3,dyn_lag_with_lag=FALSE, IV=TRUE,inst_var=c("dpi_govfrac"),lag_inst_var=2,controls,fixed_effects=c("countrycode"),id="nuts_id",time="year"){
+>>>>>>> 1f992d6c387b3f2365fbf0fe5e83ebcd21bf0802
 
 
 fixed_effects=c(id,time)
