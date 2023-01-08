@@ -21,17 +21,19 @@ fixed_effects=c(id,time)
   #define explanatory variable
   #with all lags added via 'lag' (if only one lag is desired, add only one)
   #resuls in x model specifications differing in the lag of the explanatory variable
+if(is.null(interaction_variable)){
   exp_var<-sapply(lag,function(x){
     paste0("l(",exp_var,", ",x,")")
   })
-
-
-  #define interaction term
-  if(!is.null(interaction_variable)){
-  interaction<-sapply(lag,function(x){
-    paste0("l(",exp_var,", ",x,")",":",interaction_variable)
+}else{
+  exp_var<-sapply(lag,function(x){
+    paste0("l(",exp_var,", ",x,")+","l(",exp_var,", ",x,"):","l(",interaction_variable,", ",x,")")
   })
-  }
+}
+
+
+  #define interaction term (using the new exp_var)
+
 
 
 
@@ -74,18 +76,9 @@ fixed_effects=c(id,time)
 
   #paste components of formula
   if(IV){
-    if(!is.null(interaction_variable)){
-      formula<-paste0(dep_var,"~",controls,"|",fixed_effects,"|",exp_var,"+",interaction,"~",inst_var)
-    }else{
       formula<-paste0(dep_var,"~",controls,"|",fixed_effects,"|",exp_var,"~",inst_var)
-    }
-
   }else{
-    if(!is.null(interaction_variable)){
-      formula<-paste0(dep_var,"~",exp_var,"+",interaction,"+",controls,"|",fixed_effects)
-    }else{
       formula<-paste0(dep_var,"~",exp_var,"+",controls,"|",fixed_effects)
-    }
   }
 
   #estimation of models (the number of the models is the number of the lags of the dependent variable)
