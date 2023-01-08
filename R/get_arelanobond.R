@@ -37,7 +37,7 @@ get_arelanobond<-function(data_input,dep_var,interaction_variable=NULL,dep_var_l
   #define interaction term
   if(!is.null(interaction_variable)){
   interaction<-lapply(lag,function(x){
-    paste0("stats::lag(",exp_var,"*",interaction_variable,", ",x,")")
+    paste0("stats::lag(",exp_var,", ",x,")",":",interaction_variable)
   })
   }
 

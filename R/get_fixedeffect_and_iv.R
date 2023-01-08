@@ -29,7 +29,7 @@ fixed_effects=c(id,time)
   #define interaction term
   if(!is.null(interaction_variable)){
   interaction<-sapply(lag,function(x){
-    paste0("l(",exp_var,"*",interaction_variable,", ",x,")")
+    paste0("l(",exp_var,", ",x,")",":",interaction_variable)
   })
   }
 
