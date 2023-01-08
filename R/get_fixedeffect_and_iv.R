@@ -74,9 +74,18 @@ fixed_effects=c(id,time)
 
   #paste components of formula
   if(IV){
-    formula<-paste0(dep_var,"~",controls,"|",fixed_effects,"|",exp_var,"+",interaction,"~",inst_var)
+    if(!is.null(interaction_variable)){
+      formula<-paste0(dep_var,"~",controls,"|",fixed_effects,"|",exp_var,"+",interaction,"~",inst_var)
+    }else{
+      formula<-paste0(dep_var,"~",controls,"|",fixed_effects,"|",exp_var,"~",inst_var)
+    }
+
   }else{
-    formula<-paste0(dep_var,"~",exp_var,"+",interaction,"+",controls,"|",fixed_effects)
+    if(!is.null(interaction_variable)){
+      formula<-paste0(dep_var,"~",exp_var,"+",interaction,"+",controls,"|",fixed_effects)
+    }else{
+      formula<-paste0(dep_var,"~",exp_var,"+",controls,"|",fixed_effects)
+    }
   }
 
   #estimation of models (the number of the models is the number of the lags of the dependent variable)

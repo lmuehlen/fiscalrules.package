@@ -1,4 +1,4 @@
-get_arelanobond<-function(data_input,dep_varinteraction_variable=NULL,dep_var_log=TRUE,exp_var,lag=0:3,dynamic=TRUE,dyn_lag=3,dyn_lag_with_lag=FALSE,gmm_lag=NULL,collapse=FALSE,controls=c("dpi_legelec","dpi_auton","dpi_state","dpi_exelec","ameco_udgg","ameco_uigg0","ameco_uvgd","ameco_avgdgp","ameco_uucgi"),fixed_effects=c("nuts_id","year"),lag_controls=FALSE,id="nuts_id",time="year"){
+get_arelanobond<-function(data_input,dep_var,interaction_variable=NULL,dep_var_log=TRUE,exp_var,lag=0:3,dynamic=TRUE,dyn_lag=3,dyn_lag_with_lag=FALSE,gmm_lag=NULL,collapse=FALSE,controls=c("dpi_legelec","dpi_auton","dpi_state","dpi_exelec","ameco_udgg","ameco_uigg0","ameco_uvgd","ameco_avgdgp","ameco_uucgi"),fixed_effects=c("nuts_id","year"),lag_controls=FALSE,id="nuts_id",time="year"){
   #load data
   fixed_effects=c(id,time)
 
@@ -36,7 +36,7 @@ get_arelanobond<-function(data_input,dep_varinteraction_variable=NULL,dep_var_lo
 
   #define interaction term
   if(!is.null(interaction_variable)){
-  exp_var<-lapply(lag,function(x){
+  interaction<-lapply(lag,function(x){
     paste0("stats::lag(",exp_var,"*",interaction_variable,", ",x,")")
   })
   }
@@ -67,7 +67,12 @@ get_arelanobond<-function(data_input,dep_varinteraction_variable=NULL,dep_var_lo
     controls<-paste0(dynamic,"+",controls)
   }
 
-  formula<-paste0(dep_var,"~",exp_var,"+",controls,"|",gmm_instruments)
+  if(!is.null(interaction_variable)){
+    formula<-paste0(dep_var,"~",exp_var,"+",interaction,"+",controls,"|",gmm_instruments)
+  }else{
+    formula<-paste0(dep_var,"~",exp_var,"+",controls,"|",gmm_instruments)
+  }
+
 
   formula<-lapply(formula,function(x){
     as.formula(x)
