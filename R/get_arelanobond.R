@@ -10,7 +10,7 @@ get_arelanobond<-function(data_input,dep_var,interaction_variable=NULL,dep_var_l
   }
 
   if(!is.null(interaction_variable)){
-    interaction_name<-paste0(dep_var,"_",interaction_variable)
+    interaction_name<-paste0(exp_var,"_",interaction_variable)
     data<-data%>%mutate(!!sym(interaction_name):=!!sym(exp_var)*!!sym(interaction_variable))
   }
 
