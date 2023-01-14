@@ -15,6 +15,10 @@ name<-deparse(substitute(mod))
 
   m<-m%>%
     filter(grepl("frd",term))%>%
+    mutate(
+      rule_type=gsub(".*(full|bbr|dr|er|rr).*","\\1",term),
+      level=gsub(".*(lg|rg|sng).*","\\1",term)
+    )%>%
     tidyr::extract(term,into="term",regex = ".*(\\d+).*")%>%
     mutate(
       term=case_when(!is.na(term)~paste0("Lag: ",term),
@@ -23,19 +27,17 @@ name<-deparse(substitute(mod))
     )
 
   m<-m%>%mutate(
-    dep_var=gsub("(.*)_(.*)_(.*)_(.*)_(.*)","\\1",name),
-    rule_type=gsub("(.*)_(.*)_(.*)_(.*)_(.*)","\\2",name),
-    level=gsub("(.*)_(.*)_(.*)_(.*)_(.*)","\\3",name),
-    model=gsub("(.*)_(.*)_(.*)_(.*)_(.*)","\\5",name),
+    dep_var=gsub("(.*)_(.*)_(.*)_(.*)_(.*)_(.*)","\\1",name),
+    model=gsub("(.*)_(.*)_(.*)_(.*)_(.*)_(.*)","\\5",name),
     dynlag=case_when(
-      gsub("(.*)_(.*)_(.*)_(.*)_(.*)","\\6",name)=="dynlag"~"upper bound",
+      gsub("(.*)_(.*)_(.*)_(.*)_(.*)_(.*)","\\6",name)=="upperbound"~"upper bound",
       TRUE~"lower bound")
   )%>%dplyr::filter(grepl("Lag",m$term))%>%
     select(term,estimate,conf.low,conf.high,dep_var,level,model,dynlag,rule_type)
 
   m$model<-plyr::revalue(m$model,c("within"="Within","iv"="IV","ab"="Arellano-Bond"))
   m$level<-plyr::revalue(m$level,c("sng"="Subnational gov.","lg"="local gov.","rg"="regional gov."))
-  m$dep_var<-plyr::revalue(m$dep_var,c("gfcf"="Investment","gva"="Expenditure"))
+  m$dep_var<-plyr::revalue(m$dep_var,c("gfcf"="Investment","gva"="Expenditure","ratio"="Ratio"))
 
   return(m)
 }

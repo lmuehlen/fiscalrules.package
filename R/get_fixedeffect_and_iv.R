@@ -22,9 +22,19 @@ fixed_effects=c(id,time)
   #with all lags added via 'lag' (if only one lag is desired, add only one)
   #resuls in x model specifications differing in the lag of the explanatory variable
 if(is.null(interaction_variable)){
+  if(length(exp_var)==1){
   exp_var<-sapply(lag,function(x){
     paste0("l(",exp_var,", ",x,")")
   })
+  }else if(length(exp_var)==2){
+  exp_var<-sapply(lag,function(x){
+    paste0("l(",exp_var[1],", ",x,")","+l(",exp_var[2],", ",x,")")
+    })
+  }else if(length(exp_var)==3){
+    exp_var<-sapply(lag,function(x){
+    paste0("l(",exp_var[1],", ",x,")","+l(",exp_var[2],", ",x,")","+l(",exp_var[3],", ",x,")")
+    })
+  }
 }else{
   exp_var<-sapply(lag,function(x){
     paste0("l(",exp_var,", ",x,")+","l(",exp_var,", ",x,"):","l(",interaction_variable,", ",x,")")
