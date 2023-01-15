@@ -29,11 +29,11 @@ name<-deparse(substitute(mod))
   m<-m%>%mutate(
     dep_var=gsub("(.*)_(.*)_(.*)_(.*)_(.*)_(.*)","\\1",name),
     model=gsub("(.*)_(.*)_(.*)_(.*)_(.*)_(.*)","\\5",name),
-    dynlag=case_when(
+    upper_lower=case_when(
       gsub("(.*)_(.*)_(.*)_(.*)_(.*)_(.*)","\\6",name)=="upperbound"~"upper bound",
       TRUE~"lower bound")
   )%>%dplyr::filter(grepl("Lag",m$term))%>%
-    select(term,estimate,conf.low,conf.high,dep_var,level,model,dynlag,rule_type)
+    select(term,estimate,conf.low,conf.high,dep_var,level,model,uper_lower,rule_type)
 
   m$model<-plyr::revalue(m$model,c("within"="Within","iv"="IV","ab"="Arellano-Bond"))
   m$level<-plyr::revalue(m$level,c("sng"="Subnational gov.","lg"="local gov.","rg"="regional gov."))
