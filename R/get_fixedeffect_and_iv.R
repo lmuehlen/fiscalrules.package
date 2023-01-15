@@ -36,9 +36,22 @@ if(is.null(interaction_variable)){
     })
   }
 }else{
-  exp_var<-sapply(lag,function(x){
-    paste0("l(",exp_var,", ",x,")+","l(",exp_var,", ",x,"):","l(",interaction_variable,", ",x,")")
-  })
+  if(length(exp_var)==1){
+    exp_var<-sapply(lag,function(x){
+      paste0("l(",exp_var,", ",x,")+","l(",exp_var,", ",x,"):","l(",interaction_variable,", ",x,")")
+    })
+  }else if(length(exp_var)==2){
+    exp_var<-sapply(lag,function(x){
+      paste0("l(",exp_var[1],", ",x,")+","l(",exp_var[1],", ",x,"):","l(",interaction_variable,", ",x,")",
+             "+l(",exp_var[2],", ",x,")+","l(",exp_var[2],", ",x,"):","l(",interaction_variable,", ",x,")")
+    })
+  }else if(length(exp_var)==3){
+    exp_var<-sapply(lag,function(x){
+      paste0("l(",exp_var[1],", ",x,")+","l(",exp_var[1],", ",x,"):","l(",interaction_variable,", ",x,")",
+             "+l(",exp_var[2],", ",x,")+","l(",exp_var[2],", ",x,"):","l(",interaction_variable,", ",x,")",
+             "+l(",exp_var[3],", ",x,")+","l(",exp_var[3],", ",x,"):","l(",interaction_variable,", ",x,")")
+    })
+  }
 }
 
 
