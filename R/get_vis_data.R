@@ -33,7 +33,11 @@ name<-deparse(substitute(mod))
       gsub("(.*)_(.*)_(.*)_(.*)_(.*)_(.*)","\\6",name)=="upperbound"~"upper bound",
       TRUE~"lower bound")
   )%>%dplyr::filter(grepl("Lag",m$term))%>%
+<<<<<<< HEAD
     select(term,estimate,conf.low,conf.high,dep_var,level,model,upper_lower,rule_type)
+=======
+    select(term,estimate,conf.low,conf.high,dep_var,level,model,uper_lower,rule_type)
+>>>>>>> de71542df7764a0a9a3bb451d6a2a0e8563d7f11
 
   m$model<-plyr::revalue(m$model,c("within"="Within","iv"="IV","ab"="Arellano-Bond"))
   m$level<-plyr::revalue(m$level,c("sng"="Subnational gov.","lg"="local gov.","rg"="regional gov."))
