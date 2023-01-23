@@ -18,8 +18,8 @@ get_table<-function(l,filename="test",caption=NULL,coef.map=NULL,fontsize=NULL,d
 
 
   gof<-list(
-    "nuts_id fixed effects"=rep("$\\checkmark$",length(l)),
-    "year fixe effects"=rep("$\\checkmark$",length(l))
+    "f.e.(Nuts2)"=rep("$\\checkmark$",length(l)),
+    "f.e.(Year)"=rep("$\\checkmark$",length(l))
   )
 
 
