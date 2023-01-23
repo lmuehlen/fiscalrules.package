@@ -1,14 +1,22 @@
-get_vis_data<-function(mod){
+get_vis_data<-function(mod,conf_level=0.95){
 
 name<-deparse(substitute(mod))
   if(class(mod[[1]])[1]=="pgmm"){
     m<-lapply(mod,
               function(x){
-                get_estimates(x,vcov = function(sd){plm::vcovHC(sd,cluster="countrycode")})
+                a<-coefci(x,level=conf_level,vcov. = vcovHC(x,cluster=c("countrycode")))%>%
+                  as_tibble()%>%
+                  select(conf.low=1,conf.high=2)
+                b<-coeftest(x,vcov = vcovHC(x,cluster=c("countrycode")))
+                get_estimates(b)%>%
+                  mutate(
+                    conf.low=a$conf.low,
+                    conf.high=a$conf.high)
               })
   }else{
     m<-lapply(mod,
-              function(x){get_estimates(x,draw=FALSE,cluster = ~countrycode)
+              function(x){
+                get_estimates(x,conf_level = conf_level,draw=FALSE,cluster = ~countrycode)
               })
   }
   m<-do.call("rbind",m)

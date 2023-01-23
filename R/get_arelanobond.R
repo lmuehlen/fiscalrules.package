@@ -9,9 +9,23 @@ get_arelanobond<-function(data_input,dep_var,interaction_variable=NULL,dep_var_l
     data<-data_input%>%pdata.frame(index=c(id,time))
   }
 
+if(!is.null(interaction_variable)&length(exp_var)!=length(interaction_variable)){
+  print("exp_var and interaction_variable must be of same length if interaction_variable is not null")
+}
+
   if(!is.null(interaction_variable)){
     interaction_name<-paste0(exp_var,"_",interaction_variable)
-    data<-data%>%mutate(!!sym(interaction_name):=!!sym(exp_var)*!!sym(interaction_variable))
+    if(length(exp_var)==1){
+      data<-data%>%mutate(!!sym(interaction_name):=!!sym(exp_var)*!!sym(interaction_variable))
+    }else if(length(exp_var==2)){
+      data<-data%>%mutate(!!sym(interaction_name[1]):=!!sym(exp_var[1])*!!sym(interaction_variable[1]),
+                          !!sym(interaction_name[2]):=!!sym(exp_var[2])*!!sym(interaction_variable[2]))
+    }else if(length(exp_var)==3){
+      data<-data%>%mutate(!!sym(interaction_name[1]):=!!sym(exp_var[1])*!!sym(interaction_variable[1]),
+                          !!sym(interaction_name[2]):=!!sym(exp_var[2])*!!sym(interaction_variable[2]),
+                          !!sym(interaction_name[3]):=!!sym(exp_var[3])*!!sym(interaction_variable[3]))
+    }
+
   }
 
   #define dependent variable
@@ -22,27 +36,101 @@ get_arelanobond<-function(data_input,dep_var,interaction_variable=NULL,dep_var_l
 #gmm_instruments
   if(is.null(interaction_variable)){
     if(is.null(gmm_lag)){
-      gmm_instruments<-sapply(lag,function(x){
-        paste0("plm::lag(",exp_var,",",x+2,":",99,")+plm::lag(",dep_var,",",dyn_lag+2,":",99,")")
-      })
+      if(length(exp_var)==1){
+        gmm_instruments<-sapply(lag,function(x){
+          paste0("plm::lag(",exp_var,",",x+2,":",99,")+plm::lag(",dep_var,",",dyn_lag+2,":",99,")")
+        })
+      }else if(length(exp_var)==2){
+        gmm_instruments<-sapply(lag,function(x){
+          paste0("plm::lag(",exp_var[1],",",x+2,":",99,")+",
+                 "plm::lag(",exp_var[2],",",x+2,":",99,")+",
+                 "plm::lag(",dep_var,",",dyn_lag+2,":",99,")")
+        })
+      }else if(length(exp_var)==3){
+        gmm_instruments<-sapply(lag,function(x){
+          paste0("plm::lag(",exp_var[1],",",x+2,":",99,")+",
+                 "plm::lag(",exp_var[2],",",x+2,":",99,")+",
+                 "plm::lag(",exp_var[3],",",x+2,":",99,")+",
+                 "plm::lag(",dep_var,",",dyn_lag+2,":",99,")")
+        })
+      }
+
     }else{
-      gmm_instruments<-sapply(lag,function(x){
-        paste0("plm::lag(",exp_var,",",x+2,":",x+1+gmm_lag,")+plm::lag(",dep_var,",",dyn_lag+2,":",dyn_lag+1+gmm_lag,")")
-      })
+      if(length(exp_var)==1){
+        gmm_instruments<-sapply(lag,function(x){
+          paste0("plm::lag(",exp_var,",",x+2,":",x+1+gmm_lag,")+plm::lag(",dep_var,",",dyn_lag+2,":",dyn_lag+1+gmm_lag,")")
+        })
+      }else if(length(exp_var)==2){
+        gmm_instruments<-sapply(lag,function(x){
+          paste0("plm::lag(",exp_var[1],",",x+2,":",x+1+gmm_lag,")+",
+                 "plm::lag(",exp_var[2],",",x+2,":",x+1+gmm_lag,")+",
+                 "plm::lag(",dep_var,",",dyn_lag+2,":",dyn_lag+1+gmm_lag,")")
+        })
+      }else if(length(exp_var)==3){
+        gmm_instruments<-sapply(lag,function(x){
+          paste0("plm::lag(",exp_var[1],",",x+2,":",x+1+gmm_lag,")+",
+                 "plm::lag(",exp_var[2],",",x+2,":",x+1+gmm_lag,")+",
+                 "plm::lag(",exp_var[3],",",x+2,":",x+1+gmm_lag,")+",
+                 "plm::lag(",dep_var,",",dyn_lag+2,":",dyn_lag+1+gmm_lag,")")
+        })
+      }
+
     }
   }else{
     if(is.null(gmm_lag)){
-      gmm_instruments<-sapply(lag,function(x){
-        paste0("plm::lag(",exp_var,",",x+2,":",99,")",
-               "+plm::lag(",interaction_name,",",x+2,":",99,")",
-               "+plm::lag(",dep_var,",",dyn_lag+2,":",99,")")
-      })
+      if(length(exp_var)==1){
+        gmm_instruments<-sapply(lag,function(x){
+          paste0("plm::lag(",exp_var,",",x+2,":",99,")+",
+                 "plm::lag(",interaction_name,",",x+2,":",99,")+",
+                 "plm::lag(",dep_var,",",dyn_lag+2,":",99,")")
+        })
+      }else if(length(exp_var)==2){
+        gmm_instruments<-sapply(lag,function(x){
+          paste0("plm::lag(",exp_var[1],",",x+2,":",99,")+",
+                 "plm::lag(",exp_var[2],",",x+2,":",99,")+",
+                 "plm::lag(",interaction_name[1],",",x+2,":",99,")+",
+                 "plm::lag(",interaction_name[2],",",x+2,":",99,")+",
+                 "plm::lag(",dep_var,",",dyn_lag+2,":",99,")")
+        })
+      }else if(length(exp_var)==3){
+        gmm_instruments<-sapply(lag,function(x){
+          paste0("plm::lag(",exp_var[1],",",x+2,":",99,")+",
+                 "plm::lag(",exp_var[2],",",x+2,":",99,")+",
+                 "plm::lag(",exp_var[3],",",x+2,":",99,")+",
+                 "plm::lag(",interaction_name[1],",",x+2,":",99,")+",
+                 "plm::lag(",interaction_name[2],",",x+2,":",99,")+",
+                 "plm::lag(",interaction_name[3],",",x+2,":",99,")+",
+                 "plm::lag(",dep_var,",",dyn_lag+2,":",99,")")
+        })
+      }
+
     }else{
-      gmm_instruments<-sapply(lag,function(x){
-        paste0("plm::lag(",exp_var,",",x+2,":",x+1+gmm_lag,")",
-               "+plm::lag(",interaction_name,",",x+2,":",x+1+gmm_lag,")",
-               "+plm::lag(",dep_var,",",dyn_lag+2,":",dyn_lag+1+gmm_lag,")")
-      })
+      if(length(exp_var)==1){
+        gmm_instruments<-sapply(lag,function(x){
+          paste0("plm::lag(",exp_var,",",x+2,":",x+1+gmm_lag,")+",
+                 "plm::lag(",interaction_name,",",x+2,":",x+1+gmm_lag,")+",
+                 "plm::lag(",dep_var,",",dyn_lag+2,":",dyn_lag+1+gmm_lag,")")
+        })
+      }else if(length(exp_var)==2){
+        gmm_instruments<-sapply(lag,function(x){
+          paste0("plm::lag(",exp_var[1],",",x+2,":",x+1+gmm_lag,")+",
+                 "plm::lag(",exp_var[2],",",x+2,":",x+1+gmm_lag,")+",
+                 "plm::lag(",interaction_name[1],",",x+2,":",x+1+gmm_lag,")+",
+                 "plm::lag(",interaction_name[2],",",x+2,":",x+1+gmm_lag,")+",
+                 "plm::lag(",dep_var,",",dyn_lag+2,":",dyn_lag+1+gmm_lag,")")
+        })
+      }else if(length(exp_var)==3){
+        gmm_instruments<-sapply(lag,function(x){
+          paste0("plm::lag(",exp_var[1],",",x+2,":",x+1+gmm_lag,")+",
+                 "plm::lag(",exp_var[2],",",x+2,":",x+1+gmm_lag,")+",
+                 "plm::lag(",exp_var[3],",",x+2,":",x+1+gmm_lag,")+",
+                 "plm::lag(",interaction_name[1],",",x+2,":",x+1+gmm_lag,")+",
+                 "plm::lag(",interaction_name[2],",",x+2,":",x+1+gmm_lag,")+",
+                 "plm::lag(",interaction_name[3],",",x+2,":",x+1+gmm_lag,")+",
+                 "plm::lag(",dep_var,",",dyn_lag+2,":",dyn_lag+1+gmm_lag,")")
+        })
+      }
+
     }
   }
 
@@ -54,13 +142,47 @@ get_arelanobond<-function(data_input,dep_var,interaction_variable=NULL,dep_var_l
   #with all lags added via 'lag' (if only one lag is desired, add only one)
 
   if(is.null(interaction_variable)){
-    exp_var<-lapply(lag,function(x){
-    paste0("plm::lag(",exp_var,", ",x,")")
-    })
+    if(length(exp_var)==1){
+      exp_var<-lapply(lag,function(x){
+        paste0("plm::lag(",exp_var,", ",x,")")
+      })
+    }else if(length(exp_var)==2){
+      exp_var<-lapply(lag,function(x){
+        paste0("plm::lag(",exp_var[1],", ",x,")+",
+               "plm::lag(",exp_var[2],", ",x,")")
+      })
+    }else if(length(exp_var)==3){
+      exp_var<-lapply(lag,function(x){
+        paste0("plm::lag(",exp_var[1],", ",x,")+",
+               "plm::lag(",exp_var[2],", ",x,")+",
+               "plm::lag(",exp_var[3],", ",x,")")
+      })
+    }
+
   }else{
-    exp_var<-lapply(lag,function(x){
-      paste0("plm::lag(",exp_var,", ",x,")+","plm::lag(",interaction_name,", ",x,")")
-    })
+    if(length(exp_var)==1){
+      exp_var<-lapply(lag,function(x){
+        paste0("plm::lag(",exp_var,", ",x,")+",
+               "plm::lag(",interaction_name,", ",x,")")
+      })
+    }else if(length(exp_var)==2){
+      exp_var<-lapply(lag,function(x){
+        paste0("plm::lag(",exp_var[1],", ",x,")+",
+               "plm::lag(",exp_var[2],", ",x,")+",
+               "plm::lag(",interaction_name[1],", ",x,")+",
+               "plm::lag(",interaction_name[2],", ",x,")+")
+      })
+    }else if(length(exp_var)==3){
+      exp_var<-lapply(lag,function(x){
+        paste0("plm::lag(",exp_var[1],", ",x,")+",
+               "plm::lag(",exp_var[2],", ",x,")+",
+               "plm::lag(",exp_var[3],", ",x,")+",
+               "plm::lag(",interaction_name[1],", ",x,")+",
+               "plm::lag(",interaction_name[2],", ",x,")+",
+               "plm::lag(",interaction_name[3],", ",x,")+")
+      })
+    }
+
   }
 
 
