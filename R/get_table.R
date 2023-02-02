@@ -18,8 +18,8 @@ get_table<-function(l,filename="test",caption=NULL,coef.map=NULL,fontsize=NULL,d
 
 
   gof<-list(
-    "f.e.(Nuts2)"=rep("$\\checkmark$",length(l)),
-    "f.e.(Year)"=rep("$\\checkmark$",length(l))
+    "F.E.(Nuts2)"=rep("$\\checkmark$",length(l)),
+    "F.E.(Year)"=rep("$\\checkmark$",length(l))
   )
 
 

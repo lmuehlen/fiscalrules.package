@@ -38,40 +38,40 @@ if(!is.null(interaction_variable)&length(exp_var)!=length(interaction_variable))
     if(is.null(gmm_lag)){
       if(length(exp_var)==1){
         gmm_instruments<-sapply(lag,function(x){
-          paste0("plm::lag(",exp_var,",",x+2,":",99,")+plm::lag(",dep_var,",",dyn_lag+2,":",99,")")
+          paste0("plm::lag(",exp_var,",",x+2,":",99,")+plm::lag(",dep_var,",",2,":",99,")")
         })
       }else if(length(exp_var)==2){
         gmm_instruments<-sapply(lag,function(x){
           paste0("plm::lag(",exp_var[1],",",x+2,":",99,")+",
                  "plm::lag(",exp_var[2],",",x+2,":",99,")+",
-                 "plm::lag(",dep_var,",",dyn_lag+2,":",99,")")
+                 "plm::lag(",dep_var,",",2,":",99,")")
         })
       }else if(length(exp_var)==3){
         gmm_instruments<-sapply(lag,function(x){
           paste0("plm::lag(",exp_var[1],",",x+2,":",99,")+",
                  "plm::lag(",exp_var[2],",",x+2,":",99,")+",
                  "plm::lag(",exp_var[3],",",x+2,":",99,")+",
-                 "plm::lag(",dep_var,",",dyn_lag+2,":",99,")")
+                 "plm::lag(",dep_var,",",2,":",99,")")
         })
       }
 
     }else{
       if(length(exp_var)==1){
         gmm_instruments<-sapply(lag,function(x){
-          paste0("plm::lag(",exp_var,",",x+2,":",x+1+gmm_lag,")+plm::lag(",dep_var,",",dyn_lag+2,":",dyn_lag+1+gmm_lag,")")
+          paste0("plm::lag(",exp_var,",",x+2,":",x+1+gmm_lag,")+plm::lag(",dep_var,",",2,":",1+gmm_lag,")")
         })
       }else if(length(exp_var)==2){
         gmm_instruments<-sapply(lag,function(x){
           paste0("plm::lag(",exp_var[1],",",x+2,":",x+1+gmm_lag,")+",
                  "plm::lag(",exp_var[2],",",x+2,":",x+1+gmm_lag,")+",
-                 "plm::lag(",dep_var,",",dyn_lag+2,":",dyn_lag+1+gmm_lag,")")
+                 "plm::lag(",dep_var,",",2,":",1+gmm_lag,")")
         })
       }else if(length(exp_var)==3){
         gmm_instruments<-sapply(lag,function(x){
           paste0("plm::lag(",exp_var[1],",",x+2,":",x+1+gmm_lag,")+",
                  "plm::lag(",exp_var[2],",",x+2,":",x+1+gmm_lag,")+",
                  "plm::lag(",exp_var[3],",",x+2,":",x+1+gmm_lag,")+",
-                 "plm::lag(",dep_var,",",dyn_lag+2,":",dyn_lag+1+gmm_lag,")")
+                 "plm::lag(",dep_var,",",2,":",1+gmm_lag,")")
         })
       }
 
@@ -82,7 +82,7 @@ if(!is.null(interaction_variable)&length(exp_var)!=length(interaction_variable))
         gmm_instruments<-sapply(lag,function(x){
           paste0("plm::lag(",exp_var,",",x+2,":",99,")+",
                  "plm::lag(",interaction_name,",",x+2,":",99,")+",
-                 "plm::lag(",dep_var,",",dyn_lag+2,":",99,")")
+                 "plm::lag(",dep_var,",",2,":",99,")")
         })
       }else if(length(exp_var)==2){
         gmm_instruments<-sapply(lag,function(x){
@@ -90,7 +90,7 @@ if(!is.null(interaction_variable)&length(exp_var)!=length(interaction_variable))
                  "plm::lag(",exp_var[2],",",x+2,":",99,")+",
                  "plm::lag(",interaction_name[1],",",x+2,":",99,")+",
                  "plm::lag(",interaction_name[2],",",x+2,":",99,")+",
-                 "plm::lag(",dep_var,",",dyn_lag+2,":",99,")")
+                 "plm::lag(",dep_var,",",2,":",99,")")
         })
       }else if(length(exp_var)==3){
         gmm_instruments<-sapply(lag,function(x){
@@ -100,7 +100,7 @@ if(!is.null(interaction_variable)&length(exp_var)!=length(interaction_variable))
                  "plm::lag(",interaction_name[1],",",x+2,":",99,")+",
                  "plm::lag(",interaction_name[2],",",x+2,":",99,")+",
                  "plm::lag(",interaction_name[3],",",x+2,":",99,")+",
-                 "plm::lag(",dep_var,",",dyn_lag+2,":",99,")")
+                 "plm::lag(",dep_var,",",2,":",99,")")
         })
       }
 
@@ -109,7 +109,7 @@ if(!is.null(interaction_variable)&length(exp_var)!=length(interaction_variable))
         gmm_instruments<-sapply(lag,function(x){
           paste0("plm::lag(",exp_var,",",x+2,":",x+1+gmm_lag,")+",
                  "plm::lag(",interaction_name,",",x+2,":",x+1+gmm_lag,")+",
-                 "plm::lag(",dep_var,",",dyn_lag+2,":",dyn_lag+1+gmm_lag,")")
+                 "plm::lag(",dep_var,",",2,":",1+gmm_lag,")")
         })
       }else if(length(exp_var)==2){
         gmm_instruments<-sapply(lag,function(x){
@@ -117,7 +117,7 @@ if(!is.null(interaction_variable)&length(exp_var)!=length(interaction_variable))
                  "plm::lag(",exp_var[2],",",x+2,":",x+1+gmm_lag,")+",
                  "plm::lag(",interaction_name[1],",",x+2,":",x+1+gmm_lag,")+",
                  "plm::lag(",interaction_name[2],",",x+2,":",x+1+gmm_lag,")+",
-                 "plm::lag(",dep_var,",",dyn_lag+2,":",dyn_lag+1+gmm_lag,")")
+                 "plm::lag(",dep_var,",",2,":",1+gmm_lag,")")
         })
       }else if(length(exp_var)==3){
         gmm_instruments<-sapply(lag,function(x){
@@ -127,7 +127,7 @@ if(!is.null(interaction_variable)&length(exp_var)!=length(interaction_variable))
                  "plm::lag(",interaction_name[1],",",x+2,":",x+1+gmm_lag,")+",
                  "plm::lag(",interaction_name[2],",",x+2,":",x+1+gmm_lag,")+",
                  "plm::lag(",interaction_name[3],",",x+2,":",x+1+gmm_lag,")+",
-                 "plm::lag(",dep_var,",",dyn_lag+2,":",dyn_lag+1+gmm_lag,")")
+                 "plm::lag(",dep_var,",",2,":",1+gmm_lag,")")
         })
       }
 
