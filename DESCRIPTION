@@ -25,4 +25,6 @@ Depends:
   lmtest,
   modelsummary,
   plotly,
-  texreg
+  texreg,
+  data.table,
+  xtable
