@@ -1,4 +1,4 @@
-get_table<-function(l,filename="test",caption=NULL,coef.map=NULL,fontsize=NULL,digits=4,label=NULL,side=FALSE,lag_order,header,path){
+get_table<-function(l,filename="test",cluster_name="countrycode",caption=NULL,coef.map=NULL,fontsize=NULL,digits=4,label=NULL,side=FALSE,lag_order,header,path){
 
   iv<-FALSE
   ab<-FALSE
@@ -49,7 +49,7 @@ get_table<-function(l,filename="test",caption=NULL,coef.map=NULL,fontsize=NULL,d
 
   if(ab){
     ab_gof<-list(
-      "AR(2)"=sapply(l,function(x){if(class(x)[1]=="pgmm"){mtest(x,order=2,vcov = vcovHC(x,cluster=c("countrycode")))[["p.value"]]}else{NA}}),
+      "AR(2)"=sapply(l,function(x){if(class(x)[1]=="pgmm"){mtest(x,order=2,vcov = vcovHC(x,cluster=cluster_name))[["p.value"]]}else{NA}}),
       "Sargan (GMM)"=sapply(l,function(x){if(class(x)[1]=="pgmm"){sargan(x,"twostep")[["p.value"]]}else{NA}})
     )
 
@@ -63,7 +63,7 @@ get_table<-function(l,filename="test",caption=NULL,coef.map=NULL,fontsize=NULL,d
       #F-Test
       "F-test $1^{st}$ stage"=sapply(l,function(x){
         if(class(x)[1]=="fixest"&!is.null(x[["iv"]])){
-          fitstat(x,"ivf1",vcov=~countrycode)[[1]]$stat
+          fitstat(x,"ivf1",vcov=cluster_name)[[1]]$stat
         }else{
           NA
         }
@@ -71,7 +71,7 @@ get_table<-function(l,filename="test",caption=NULL,coef.map=NULL,fontsize=NULL,d
       #Kleinbergen-Paap
       "Kleinbergen-Paap"=sapply(l,function(x){
         if(class(x)[1]=="fixest"&!is.null(x[["iv"]])){
-          fitstat(x,"ivwald1",vcov=~countrycode)[[1]]$stat
+          fitstat(x,"ivwald1",vcov=cluster_name)[[1]]$stat
         }else{
           NA
         }
@@ -108,7 +108,7 @@ get_table<-function(l,filename="test",caption=NULL,coef.map=NULL,fontsize=NULL,d
 
   for(i in 1:length(l)){
     if(class(l[[i]][1])=="pgmm"){
-      l[[i]]<-coeftest(l[[i]],vcov=vcovHC(l[[i]],cluster=c("countrycode")))
+      l[[i]]<-coeftest(l[[i]],vcov=vcovHC(l[[i]],cluster=cluster_name))
     }
   }
 
@@ -741,5 +741,3 @@ if(is.null(coef.map)){
   )
 
 }
-
-
