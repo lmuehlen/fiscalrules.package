@@ -106,8 +106,9 @@ if(is.null(interaction_variable)){
 
   #estimation of models (the number of the models is the number of the lags of the dependent variable)
   m<-lapply(formula,function(x){
-    fixest::feols(as.formula(x),data = data,
-          vcov = ~countrycode)
+    fixest::feols(as.formula(x),data = data#,
+         # vcov = ~countrycode
+         )
   })
 
   return(m)
