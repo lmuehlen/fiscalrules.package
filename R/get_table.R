@@ -1,4 +1,4 @@
-get_table<-function(l,filename="test",cluster_name="countrycode",caption=NULL,coef.map=NULL,fontsize=NULL,digits=4,label=NULL,side=FALSE,lag_order,header,path){
+get_table<-function(l,filename="test",cluster_name="nuts_id",caption=NULL,coef.map=NULL,fontsize=NULL,digits=4,label=NULL,side=FALSE,lag_order,header,path){
 
   iv<-FALSE
   ab<-FALSE
