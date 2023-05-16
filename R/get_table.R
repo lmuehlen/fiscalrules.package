@@ -37,7 +37,7 @@ if(within==TRUE|ab==TRUE){
 
 
 ## GOF
-  {
+
   gof<-list(
     "F.E.(Nuts2)"=rep("$\\checkmark$",length(l)),
     "F.E.(Year)"=rep("$\\checkmark$",length(l))
@@ -122,7 +122,7 @@ if(within==TRUE|ab==TRUE){
 
     gof<-do.call(c,list(gof,iv_gof))
   }
-  }
+
 
 # get coefficients and se of pgmm
   for(i in 1:length(l)){
