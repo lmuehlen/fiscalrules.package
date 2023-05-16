@@ -1,4 +1,4 @@
-get_table<-function(l,filename="test",cluster_name="nuts_id",caption=NULL,coef.map=NULL,fontsize=NULL,digits=4,label=NULL,side=FALSE,lag_order,header,path){
+get_table<-function(l,filename="test",cluster_name="nuts_id",caption=NULL,coef.map=NULL,fontsize="tiny",digits=4,label=NULL,side=FALSE,lag_order,headers,path){
 
   iv<-FALSE
   ab<-FALSE
@@ -19,6 +19,7 @@ get_table<-function(l,filename="test",cluster_name="nuts_id",caption=NULL,coef.m
 
 if(within==TRUE|ab==TRUE){
     se<-list()
+    p<-list()
   for(i in 1:length(l)){
       if(class(l[[i]][1])=="pgmm"){
         se[[i]]<-0
@@ -32,7 +33,6 @@ if(within==TRUE|ab==TRUE){
     se<-0
     p<-0
   }
-
 
 
 
@@ -61,7 +61,7 @@ if(within==TRUE|ab==TRUE){
         }else{NA}
       })
     )
-    gof<-do.call(c,list(gof,within_gof))
+    gof<-c(gof,within_gof)
   }
 
 
@@ -71,7 +71,7 @@ if(within==TRUE|ab==TRUE){
       "Sargan (GMM)"=sapply(l,function(x){if(class(x)[1]=="pgmm"){sargan(x,"twostep")[["p.value"]]}else{NA}})
     )
 
-    gof<-do.call(c,list(gof,ab_gof))
+    gof<-c(gof,ab_gof)
   }
 
 
@@ -120,7 +120,7 @@ if(within==TRUE|ab==TRUE){
       })
     )
 
-    gof<-do.call(c,list(gof,iv_gof))
+    gof<-c(gof,iv_gof)
   }
 
 
@@ -736,6 +736,12 @@ if(is.null(coef.map)){
   )
 }
 
+#define header
+  max_lag <- max(lag_order)
+  start_values <- seq(from = 1, by = max_lag + 1, length.out = length(headers))
+  end_values <- start_values + max_lag
+  header_list <- setNames(lapply(seq_along(headers), function(i) start_values[i]:end_values[i]), headers)
+
   texreg(l=l,
          file = paste0(path,filename,".tex"),
          fontsize = fontsize,
@@ -758,8 +764,8 @@ if(is.null(coef.map)){
          use.packages = FALSE,
          float.pos = "h!",
          digits = digits,
-         custom.model.names = paste0("h=",lag_order),
-         custom.header = header,
+         custom.model.names = paste0("h=",rep(lag_order,length(headers))),
+         custom.header = header_list,
          caption = caption
   )
 
