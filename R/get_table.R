@@ -17,13 +17,31 @@ get_table<-function(l,filename="test",cluster_name="nuts_id",caption=NULL,coef.m
 
 
 
+if(within==TRUE|ab==TRUE){
+    se<-list()
+  for(i in 1:length(l)){
+      if(class(l[[i]][1])=="pgmm"){
+        se[[i]]<-0
+        p[[i]]<-0
+      }else{
+        se[[i]]<-se(l[[i]],cluster=cluster_name)
+        p[[i]]<-pvalue(l[[i]],cluster=cluster_name)
+      }
+    }
+  }else{
+    se<-0
+    p<-0
+  }
+
+
+
+
+## GOF
+  {
   gof<-list(
     "F.E.(Nuts2)"=rep("$\\checkmark$",length(l)),
     "F.E.(Year)"=rep("$\\checkmark$",length(l))
   )
-
-
-
 
   if(within){
     within_gof<-list(
@@ -49,7 +67,7 @@ get_table<-function(l,filename="test",cluster_name="nuts_id",caption=NULL,coef.m
 
   if(ab){
     ab_gof<-list(
-      "AR(2)"=sapply(l,function(x){if(class(x)[1]=="pgmm"){mtest(x,order=2,vcov = vcovHC(x,cluster=cluster_name))[["p.value"]]}else{NA}}),
+      "AR(2)"=sapply(l,function(x){if(class(x)[1]=="pgmm"){mtest(x,order=2,vcov = vcovHC(x))[["p.value"]]}else{NA}}),
       "Sargan (GMM)"=sapply(l,function(x){if(class(x)[1]=="pgmm"){sargan(x,"twostep")[["p.value"]]}else{NA}})
     )
 
@@ -63,7 +81,7 @@ get_table<-function(l,filename="test",cluster_name="nuts_id",caption=NULL,coef.m
       #F-Test
       "F-test $1^{st}$ stage"=sapply(l,function(x){
         if(class(x)[1]=="fixest"&!is.null(x[["iv"]])){
-          fitstat(x,"ivf1",vcov=cluster_name)[[1]]$stat
+          fitstat(x,"ivf1",cluster=cluster_name)[[1]]$stat
         }else{
           NA
         }
@@ -71,7 +89,7 @@ get_table<-function(l,filename="test",cluster_name="nuts_id",caption=NULL,coef.m
       #Kleinbergen-Paap
       "Kleinbergen-Paap"=sapply(l,function(x){
         if(class(x)[1]=="fixest"&!is.null(x[["iv"]])){
-          fitstat(x,"ivwald1",vcov=cluster_name)[[1]]$stat
+          fitstat(x,"ivwald1",cluster=cluster_name)[[1]]$stat
         }else{
           NA
         }
@@ -104,13 +122,17 @@ get_table<-function(l,filename="test",cluster_name="nuts_id",caption=NULL,coef.m
 
     gof<-do.call(c,list(gof,iv_gof))
   }
+  }
 
-
+# get coefficients and se of pgmm
   for(i in 1:length(l)){
     if(class(l[[i]][1])=="pgmm"){
-      l[[i]]<-coeftest(l[[i]],vcov=vcovHC(l[[i]],cluster=cluster_name))
+      l[[i]]<-coeftest(l[[i]],vcov=vcovHC(l[[i]]))#Windmejer adjusted SE
     }
   }
+
+
+
 
 #defines coefficient map
 if(is.null(coef.map)){
@@ -718,7 +740,8 @@ if(is.null(coef.map)){
          file = paste0(path,filename,".tex"),
          fontsize = fontsize,
          stars = c( 0.01, 0.05,0.1),
-         robust=TRUE,
+         override.se=se,
+         override.pvalues,
          omit.coef = "dpi|ameco",
          custom.coef.map=coef.map,
          include.wald=FALSE,
