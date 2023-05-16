@@ -741,7 +741,7 @@ if(is.null(coef.map)){
          fontsize = fontsize,
          stars = c( 0.01, 0.05,0.1),
          override.se=se,
-         override.pvalues,
+         override.pvalues=p,
          omit.coef = "dpi|ameco",
          custom.coef.map=coef.map,
          include.wald=FALSE,
