@@ -1,5 +1,9 @@
 get_table<-function(l,filename="test",cluster_name="nuts_id",caption=NULL,coef.map=NULL,fontsize="tiny",digits=4,label=NULL,side=FALSE,lag_order,headers,path){
 
+if(is.null(label)){
+  label<-filename
+}
+
   iv<-FALSE
   ab<-FALSE
   within<-FALSE
