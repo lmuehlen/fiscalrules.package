@@ -133,7 +133,21 @@ se_afterx<-sapply(l,function(x){
     get_effect_after_x_years(shortrun,dyn_effect,afteryears,vcov,report="se")
   })
 
-se_afterx<-sapply(se_afterx, function(x){paste0("$(",round(x,4),")$")})
+tvalue<-effect_afterx/se_afterx
+
+if(class(l[[1]])[1]=="fixest"){
+df<-sapply(l,function(x){degrees_freedom(x,"t")})
+}else{
+df<-sapply(l,function(x){df=ncol(x$W[[1L]])-length(x$coefficients)})
+}
+pvalues<-2 * pt(-abs(tvalue), df)
+stars<-case_when(pvalues<0.01~"***",
+                 pvalues<0.05~"**",
+                 pvalues<0.1~"*",
+                 TRUE~"")
+
+effect_afterx<-paste0("$(",sprintf("%.4f",round(effect_afterx,4)),"^{",stars,"})$")
+  se_afterx<-paste0("$(",sprintf("%.4f",round(se_afterx,4)),")$")
 
 
 name_effect<-paste("Effect after",afteryears,"years")
