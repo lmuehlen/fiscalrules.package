@@ -1,4 +1,4 @@
-get_table<-function(l,filename="test",cluster_name="nuts_id",caption=NULL,coef.map=NULL,fontsize=NULL,scalebox=0.8,digits=4,label=NULL,side=FALSE,lag_order,headers,path,afteryears=10){
+get_table<-function(l,filename="test",cluster_name="nuts_id",caption=NULL,coef.map=NULL,fontsize=NULL,scalebox=0.8,digits=4,label=NULL,side=FALSE,lag_order,headers,path,afteryears=10,include_effect_afterx=TRUE){
 
 if(is.null(label)){
   label<-filename
@@ -115,6 +115,7 @@ if(within==TRUE|ab==TRUE){
     gof<-c(gof,iv_gof)
   }
 
+if(include_effect_afterx){
 #additional gof for all
   #effect after x years
 effect_afterx<-sapply(l,function(x){
@@ -123,6 +124,7 @@ effect_afterx<-sapply(l,function(x){
     vcov<-vcov(x,cluster=cluster_name)[c(2:4,1),c(2:4,1)]
     get_effect_after_x_years(shortrun,dyn_effect,afteryears,vcov,report="effect")
   })
+
 
 se_afterx<-sapply(l,function(x){
     dyn_effect<-coef(x)[2:4]
@@ -143,6 +145,7 @@ gof_add<-list(
 
 
 gof<-c(gof,gof_add)
+}
 
 # get coefficients and se of pgmm
   for(i in 1:length(l)){
