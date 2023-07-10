@@ -1,4 +1,4 @@
-get_table<-function(l,filename="test",cluster_name="nuts_id",caption=NULL,coef.map=NULL,fontsize=NULL,scalebox=0.8,digits=4,label=NULL,side=FALSE,lag_order,headers,path,afteryears=10,include_effect_afterx=TRUE){
+get_table<-function(l,filename="test",cluster_name="nuts_id",caption=NULL,coef.map=NULL,fontsize=NULL,scalebox=0.8,digits=4,label=NULL,side=FALSE,lag_order,headers,path,afteryears=10,include_effect_afterx=TRUE,include_t=TRUE){
 
 if(is.null(label)){
   label<-filename
@@ -138,13 +138,20 @@ se_afterx<-sapply(se_afterx, function(x){paste0("$(",round(x,4),")$")})
 
 name_effect<-paste("Effect after",afteryears,"years")
 
-gof_add<-list(
+gof_afterx<-list(
   effect_afterx,
   se_afterx
 )%>%setNames(c(name_effect,""))
 
 
-gof<-c(gof,gof_add)
+gof<-c(gof,gof_afterx)
+}
+
+if(include_t){
+results_ttest<-rep("$-$",length(l))
+results_ttest[(length(l)/2+1):length(l)]<-t_test_comp_gfcfgva(l[1:(length(l)/2)],l[(length(l)/2+1):length(l)])[3][[1]]
+gof_ttest<-list("P-value: Investment>Expenditure"=results_ttest)
+gof<-c(gof,gof_ttest)
 }
 
 # get coefficients and se of pgmm
