@@ -24,7 +24,9 @@ name<-deparse(substitute(mod))
   m<-m%>%
     filter(grepl("frd",term))%>%
     mutate(
-      rule_type=gsub(".*(full|bbr|dr|er|rr).*","\\1",term),
+
+      rule_type=case_when(grepl(".*[^:]:[^:].*",term)~"Interaction_term",
+                          TRUE~ gsub(".*(full|bbr|dr|er|rr).*","\\1",term)),
       level=gsub(".*(lg|rg|sng).*","\\1",term)
     )%>%
     tidyr::extract(term,into="term",regex = ".*(\\d+).*")%>%

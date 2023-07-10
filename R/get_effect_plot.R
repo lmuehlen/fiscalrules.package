@@ -1,4 +1,4 @@
-get_effect_plot<-function(data,filename,facet_var_x=NULL,facet_order_x=NULL,facet_var_y=NULL,facet_order_y=NULL,font="serif",color_palette=NULL,no_fill_legend=FALSE,size=25,height=15,width=25,limits=NULL,breaks=NULL,path="C:/Users/leona/Dropbox/Apps/Overleaf/The Political Economy of Fiscal Rules - Between Deficit and Disinvestment Bias (Mai 2023)/Graphics/"){
+get_effect_plot<-function(data,filename,scale_x=TRUE,facet_var_x=NULL,facet_order_x=NULL,facet_var_y=NULL,facet_order_y=NULL,font="serif",color_palette=NULL,no_fill_legend=FALSE,size=25,height=15,width=25,limits=NULL,breaks=NULL,path="C:/Users/leona/Dropbox/Apps/Overleaf/The Political Economy of Fiscal Rules - Between Deficit and Disinvestment Bias (Mai 2023)/Graphics/"){
 
   if(!is.null(facet_var_x)&is.null(facet_order_x)){
     data[[facet_var_x]] <- factor(data[[facet_var_x]], levels = data[[facet_var_x]]%>%unique())
@@ -8,7 +8,7 @@ get_effect_plot<-function(data,filename,facet_var_x=NULL,facet_order_x=NULL,face
 
   if(!is.null(facet_var_y)&is.null(facet_order_y)){
     data[[facet_var_y]] <- factor(data[[facet_var_y]], levels = data[[facet_var_y]]%>%unique())
-  }else if(!is.null(facet_var_x)&!is.null(facet_order_x)){
+  }else if(!is.null(facet_var_y)&!is.null(facet_order_y)){
     data[[facet_var_y]] <- factor(data[[facet_var_y]], levels = facet_order_y)
   }
 
@@ -49,6 +49,7 @@ if(no_fill_legend==FALSE){
     geom_pointrange(aes(y=term,x=estimate,xmin=conf.low,xmax=conf.high,fill=dep_var,color=dep_var,shape=upper_lower),position=position_dodge(width=0.6),fatten=4)+
     geom_vline(xintercept = 0,linetype="dashed")+
     scale_x_continuous(breaks = breaks,limits = limits)+
+    {if(scale_x==TRUE) scale_x_continuous(breaks = breaks,limits = limits,labels = function(x) paste0(x*100,"%"))}+
     scale_y_discrete(limits=rev)+theme_tufte(base_family=font,base_size=size,ticks = FALSE)+
     theme(
           legend.position = "bottom",
