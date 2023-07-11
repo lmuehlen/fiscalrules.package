@@ -29,7 +29,7 @@ get_effect_after_x_years <- function(shortrun, dyn_effect, years, vcov,report="b
   }
   for(i in (n_lags+3):limit) {
     vcov_m[[i]] <- deltamethod(make_formula_deltamethod(n_lags+2,n_lags),
-                               c(dyn_effect, effect[1,(i-n_lags):(i-1)]),
+                               c(dyn_effect, effect[c(1,(i-n_lags):(i-1))]),
                                vcov_m[[i-1]][-(n_lags+2),-(n_lags+2)], ses=FALSE)
   }
 
