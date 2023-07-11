@@ -1,4 +1,4 @@
-get_effect_after_x_years <- function(shortrun, dyn_effect, years, vcov,report="both") {
+get_effect_after_x_years <- function(shortrun, dyn_effect, years, vcov,report="both",df=NULL,conf.level=0.05) {
 
   # shortrun is the effect of the coefficient in question
   # dyn_effect is a vector including the coefficients of the lagged dependent variables
@@ -43,12 +43,29 @@ get_effect_after_x_years <- function(shortrun, dyn_effect, years, vcov,report="b
   names(effect_and_se) <- c("effect", "standard error")
   effect_and_se
 
+  se_longrun_full<-sapply(1:length(vcov_m),function(x){
+    se<-sqrt(diag(vcov_m[[x]]))
+    se[length(se)]
+  })
+
+  full<-tibble(t=0:(length(effect)-1),effect,se=se_longrun_full)
+
+
   if(report=="effect"){
     return(effect_longrun)
   }else if(report=="se"){
     return(se_longrun)
+  }else if(report=="full"){
+
+    full<-full%>%mutate(
+      conf.low=effect-qt(1-conf.level/2,df)*se,
+      conf.high=effect+qt(1-conf.level/2,df)*se
+    )
+
+    return(full)
   }else{
     return(effect_and_se)
+
   }
 
 }
