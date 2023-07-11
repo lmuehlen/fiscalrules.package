@@ -146,11 +146,8 @@ stars<-case_when(pvalues<0.01~"***",
                  pvalues<0.1~"*",
                  TRUE~"")
 
-effect_afterx<-paste0("$",sprintf("%.4f",round(effect_afterx,4)),"^{",stars,"}$")
-effect_afterx<-sub("^0\\.", ".", effect_afterx)
-
-se_afterx<-paste0("$(",sprintf("%.4f",round(se_afterx,4)),")$")
-se_afterx<-sub("^0\\.", ".", se_afterx)
+effect_afterx<-effect_afterx%>%sprintf("%.4f",.)%>%sub("0\\.", ".", .)%>%paste0("$",.,"^{",stars,"}$")
+se_afterx<-se_afterx%>%sprintf("%.4f",.)%>%sub("^0\\.", ".", .)%>%paste0("$(",.,")$")
 
 name_effect<-paste("Effect after",afteryears,"years (t+10)")
 
@@ -168,7 +165,7 @@ results_ttest<-rep("-",length(l))
 results_ttest[(length(l)/2+1):length(l)]<-t_test_comp_gfcfgva(l[1:(length(l)/2)],l[(length(l)/2+1):length(l)])[3][[1]]%>%
   sprintf("%.4f",.)%>%sub("^0\\.", ".", .)
 
-gof_ttest<-list("P-value: \beta_{inv}<\beta_{exp}"=paste0("$",results_ttest,"$"))
+gof_ttest<-list("P-value: $\\beta_{inv}<\\beta_{exp}$"=paste0("$",results_ttest,"$"))
 gof<-c(gof,gof_ttest)
 }
 
