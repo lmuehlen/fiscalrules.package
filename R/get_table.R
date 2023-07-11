@@ -147,10 +147,12 @@ stars<-case_when(pvalues<0.01~"***",
                  TRUE~"")
 
 effect_afterx<-paste0("$",sprintf("%.4f",round(effect_afterx,4)),"^{",stars,"}$")
-  se_afterx<-paste0("$(",sprintf("%.4f",round(se_afterx,4)),")$")
+effect_afterx<-sub("^0\\.", ".", effect_afterx)
 
+se_afterx<-paste0("$(",sprintf("%.4f",round(se_afterx,4)),")$")
+se_afterx<-sub("^0\\.", ".", se_afterx)
 
-name_effect<-paste("Effect after",afteryears,"years")
+name_effect<-paste("Effect after",afteryears,"years (t+10)")
 
 gof_afterx<-list(
   effect_afterx,
@@ -163,8 +165,10 @@ gof<-c(gof,gof_afterx)
 
 if(include_t){
 results_ttest<-rep("-",length(l))
-results_ttest[(length(l)/2+1):length(l)]<-t_test_comp_gfcfgva(l[1:(length(l)/2)],l[(length(l)/2+1):length(l)])[3][[1]]
-gof_ttest<-list("P-value: Investment>Expenditure"=paste0("$",results_ttest,"$"))
+results_ttest[(length(l)/2+1):length(l)]<-t_test_comp_gfcfgva(l[1:(length(l)/2)],l[(length(l)/2+1):length(l)])[3][[1]]%>%
+  sprintf("%.4f",.)%>%sub("^0\\.", ".", .)
+
+gof_ttest<-list("P-value: \beta_{inv}<\beta_{exp}"=paste0("$",sprintf("%.4f",round(results_ttest,4)),"$"))
 gof<-c(gof,gof_ttest)
 }
 
