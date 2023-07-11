@@ -168,7 +168,7 @@ results_ttest<-rep("-",length(l))
 results_ttest[(length(l)/2+1):length(l)]<-t_test_comp_gfcfgva(l[1:(length(l)/2)],l[(length(l)/2+1):length(l)])[3][[1]]%>%
   sprintf("%.4f",.)%>%sub("^0\\.", ".", .)
 
-gof_ttest<-list("P-value: \beta_{inv}<\beta_{exp}"=paste0("$",sprintf("%.4f",round(results_ttest,4)),"$"))
+gof_ttest<-list("P-value: \beta_{inv}<\beta_{exp}"=paste0("$",results_ttest,"$"))
 gof<-c(gof,gof_ttest)
 }
 
